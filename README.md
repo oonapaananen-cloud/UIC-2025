@@ -25,3 +25,14 @@ use the **Raw** button to view or download the file directly.
    ```
 2. Visit [http://localhost:8000](http://localhost:8000) in your browser. The
    `index.html` page will load at the root.
+
+## Viewing at the intended device size
+
+- The prototype is sized for a 412 × 917 Android viewport. On a laptop, the
+  page renders inside a centered device frame at that size (or scales down if
+  the browser window is smaller).
+- To preview the exact mobile viewport in Chrome/Edge devtools: open the page,
+  press **Ctrl+Shift+M** (or **Cmd+Shift+M** on macOS), choose **Responsive**
+  and enter **412** for width and **917** for height. Safari users can enable
+  Responsive Design Mode via **Develop → Enter Responsive Design Mode** and set
+  the same dimensions.
