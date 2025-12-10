@@ -3,17 +3,21 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Driver Route Companion</title>
+  <title>Routes Prototype</title>
   <style>
     :root {
-      --nav-height: 76px;
       --primary: #2f6cff;
       --primary-soft: #e7edff;
+      --accent-green: #1fb774;
+      --accent-orange: #f2994a;
+      --accent-red: #ef4444;
+      --accent-blue: #2f6cff;
       --text-main: #0f1a38;
       --text-muted: #6b7280;
-      --border: #e5e7eb;
-      --bg: #f8fafc;
-      --shadow: 0 -6px 30px rgba(15, 26, 56, 0.08);
+      --border: #e7e7e9;
+      --bg: #f7f8fb;
+      --nav-height: 82px;
+      --card-shadow: 0 18px 46px rgba(15, 26, 56, 0.08);
     }
 
     * {
@@ -23,93 +27,353 @@
     body {
       margin: 0;
       font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: linear-gradient(180deg, #e5e7eb 0%, #f8fafc 100%);
+      background: linear-gradient(180deg, #e9edf3 0%, #f7f8fb 100%);
       color: var(--text-main);
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 24px;
+      padding: 32px;
+    }
+
+    h1, h2, h3, h4, h5, p {
+      margin: 0;
+    }
+
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+      gap: 28px;
+      justify-items: center;
     }
 
     .device {
       width: 412px;
       height: 917px;
-      max-width: 100%;
-      max-height: calc(100vh - 48px);
-      background: var(--bg);
-      border: 1px solid var(--border);
+      background: #fff;
       border-radius: 32px;
-      box-shadow: 0 24px 60px rgba(15, 26, 56, 0.18);
+      border: 1px solid var(--border);
+      box-shadow: 0 30px 70px rgba(15, 26, 56, 0.18);
       overflow: hidden;
       display: flex;
       flex-direction: column;
+      position: relative;
     }
 
-    header {
-      padding: 24px 24px 8px;
+    .status-bar {
+      height: 32px;
+      padding: 0 18px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 10px;
+      font-size: 12px;
+      color: #0f1a38;
     }
 
-    h1 {
-      margin: 0;
-      font-size: 24px;
+    .status-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      border: 2px solid var(--text-main);
+      display: inline-block;
+      position: relative;
+    }
+
+    .status-dot::after {
+      content: "";
+      position: absolute;
+      inset: 3px;
+      border-radius: 50%;
+      background: var(--text-main);
+    }
+
+    .content {
+      flex: 1;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      background: #fff;
+    }
+
+    .hero {
+      padding: 16px 18px 0;
+    }
+
+    .greeting {
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .stat-card {
+      background: #f3f6ff;
+      border-radius: 14px;
+      padding: 12px 10px;
+      text-align: center;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .stat-card span {
+      display: block;
+      font-size: 12px;
+      color: var(--text-muted);
+      font-weight: 600;
+      margin-top: 4px;
+    }
+
+    .trip-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #f3f6ff;
+      border-radius: 12px;
+      padding: 12px 14px;
+      margin-bottom: 10px;
       font-weight: 700;
     }
 
-    p.lead {
-      margin: 8px 0 0;
+    .trip-row .label {
+      display: block;
+      font-size: 12px;
       color: var(--text-muted);
-      line-height: 1.5;
-      max-width: 780px;
+      font-weight: 600;
     }
 
-    main {
-      flex: 1;
-      padding: 0 24px calc(var(--nav-height) + 24px);
-      display: grid;
-      gap: 16px;
-      align-content: start;
-      overflow-y: auto;
+    .trip-change {
+      color: var(--primary);
+      font-weight: 700;
+      text-decoration: none;
+      font-size: 13px;
     }
 
-    .card {
+    .voice-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #f3f6ff;
+      border-radius: 12px;
+      padding: 12px 14px;
+      margin-bottom: 12px;
+      font-weight: 700;
+    }
+
+    .voice-row span {
+      display: block;
+      font-size: 12px;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    .voice-toggle {
+      color: var(--primary);
+      font-weight: 700;
+      font-size: 13px;
+      text-decoration: none;
+    }
+
+    .map {
+      position: relative;
+      margin: 0 0 10px;
+      border-radius: 16px;
+      overflow: hidden;
+      height: 380px;
+      background: radial-gradient(circle at 40% 30%, rgba(47,108,255,0.2), transparent 38%),
+        radial-gradient(circle at 65% 40%, rgba(34,197,94,0.18), transparent 32%),
+        linear-gradient(180deg, #f5f7fb 0%, #e6ebf5 100%);
+      border: 1px solid #dfe5f2;
+    }
+
+    .map::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="800" height="800" viewBox="0 0 800 800"><g stroke="%23c9d1e2" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round" opacity="0.8"><path d="M50 20 L80 140 L60 260 L100 400 L80 520 L120 640 L100 760" /><path d="M200 0 L230 140 L190 280 L240 420 L210 560 L260 700" /><path d="M360 40 L380 160 L340 300 L420 460 L400 600 L430 740" /><path d="M520 10 L540 140 L500 300 L560 450 L520 610 L570 760" /><path d="M680 60 L700 200 L660 340 L720 480 L700 620 L730 760" /><path d="M0 120 L800 200" /><path d="M0 320 L800 380" /><path d="M0 520 L800 600" /></g></svg>');
+      mix-blend-mode: multiply;
+      opacity: 0.6;
+    }
+
+    .map .city {
+      position: absolute;
+      top: 50%;
+      left: 44%;
+      transform: translate(-50%, -50%);
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .pin {
+      position: absolute;
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
       background: #fff;
       border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 16px;
-      box-shadow: 0 12px 40px rgba(15, 26, 56, 0.06);
+      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.14);
+      display: grid;
+      place-items: center;
+      font-weight: 800;
+      color: var(--text-main);
     }
 
-    .card h2 {
-      margin: 0 0 6px;
-      font-size: 18px;
+    .pin.primary { color: var(--primary); }
+    .pin.green { color: var(--accent-green); }
+
+    .pin.start { top: 58%; left: 36%; }
+    .pin.end { top: 32%; left: 65%; }
+    .pin.mid { top: 54%; left: 48%; }
+
+    .car-bubble {
+      position: absolute;
+      bottom: 22px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 16px;
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.14);
+      border: 1px solid var(--border);
+      font-weight: 700;
+      color: var(--text-main);
     }
 
-    .card p {
-      margin: 0;
+    .car-bubble span {
+      font-size: 13px;
       color: var(--text-muted);
-      line-height: 1.5;
+      font-weight: 600;
+    }
+
+    .route-line {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+    }
+
+    .route-line svg { width: 100%; height: 100%; display: block; }
+
+    .list-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 4px 6px;
+      font-weight: 700;
+    }
+
+    .list-header a {
+      color: var(--primary);
+      font-size: 13px;
+      text-decoration: none;
+      font-weight: 700;
+    }
+
+    .routes {
+      display: grid;
+      gap: 10px;
+      padding-bottom: 8px;
+    }
+
+    .route-card {
+      display: flex;
+      gap: 12px;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 12px;
+      background: #fff;
+      box-shadow: 0 12px 36px rgba(15, 26, 56, 0.06);
+    }
+
+    .route-card.active { border-color: var(--primary); box-shadow: 0 14px 36px rgba(47,108,255,0.16); }
+
+    .route-icon {
+      width: 12px;
+      border-radius: 6px;
+      background: var(--primary);
+    }
+
+    .route-card.orange .route-icon { background: var(--accent-orange); }
+    .route-card.green .route-icon { background: var(--accent-green); }
+    .route-card.red .route-icon { background: var(--accent-red); }
+
+    .route-body { flex: 1; }
+
+    .route-title {
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 6px;
+    }
+
+    .pill {
+      padding: 4px 8px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+      background: #f3f4f6;
+      color: var(--text-muted);
+    }
+
+    .pill.good { background: #e7fff4; color: var(--accent-green); }
+
+    .meta {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: var(--text-muted);
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .actions {
+      margin: 10px 4px;
+      display: grid;
+      gap: 10px;
+    }
+
+    .cta {
+      width: 100%;
+      padding: 14px 16px;
+      border-radius: 16px;
+      border: none;
+      background: var(--primary);
+      color: #fff;
+      font-weight: 800;
+      font-size: 16px;
+      cursor: pointer;
+      box-shadow: 0 18px 38px rgba(47,108,255,0.26);
+    }
+
+    .cta.secondary {
+      background: #eef2ff;
+      color: var(--primary);
+      box-shadow: none;
+      border: 1px solid var(--primary-soft);
     }
 
     .nav-shell {
       margin-top: auto;
-      position: sticky;
-      bottom: 0;
-      width: 100%;
       height: var(--nav-height);
+      border-top: 1px solid var(--border);
       background: #fff;
       display: flex;
       align-items: center;
       justify-content: center;
-      box-shadow: var(--shadow);
-      border-top: 1px solid var(--border);
-      padding: 12px 20px;
+      padding: 8px 18px;
+      box-shadow: 0 -12px 40px rgba(15,26,56,0.08);
     }
 
     .nav {
-      width: 100%;
       display: grid;
       grid-template-columns: repeat(3, 1fr);
+      width: 100%;
       gap: 10px;
     }
 
@@ -117,83 +381,603 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
-      gap: 8px;
+      gap: 6px;
       padding: 10px 0;
       border-radius: 16px;
       color: var(--text-muted);
-      font-weight: 600;
+      font-weight: 700;
       text-decoration: none;
-      transition: all 0.2s ease;
     }
 
     .nav-item svg {
       width: 24px;
       height: 24px;
       stroke: currentColor;
+      fill: none;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
     }
 
     .nav-item.active {
       background: var(--primary-soft);
       color: var(--primary);
     }
+
+    .state-label {
+      position: absolute;
+      top: 10px;
+      left: 14px;
+      padding: 6px 10px;
+      background: rgba(15, 26, 56, 0.06);
+      border-radius: 10px;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-main);
+    }
   </style>
 </head>
 <body>
-  <div class="device" role="presentation">
-    <header>
-      <h1>Routes</h1>
-      <p class="lead">
-        Minibus drivers in Addis Ababa rely on personal experience and word-of-mouth to pick their
-        next route. This prototype offers a conversational, safety-aware companion that surfaces the
-        best options based on evolving demand and congestion.
-      </p>
-    </header>
-
-    <main>
-      <section class="card">
-        <h2>Suggested route</h2>
-        <p>Shiro Meda ➜ Megenagna · Avoid heavy congestion near Arat Kilo.</p>
-      </section>
-
-      <section class="card">
-        <h2>Safety &amp; demand insight</h2>
-        <p>Passenger demand is trending upward in Merkato over the next 20 minutes.</p>
-      </section>
-
-      <section class="card">
-        <h2>Conversation starter</h2>
-        <p>“Where would you like to head next? I can suggest a less crowded route.”</p>
-      </section>
-    </main>
-
-    <nav class="nav-shell" aria-label="Primary">
-      <div class="nav">
-        <a class="nav-item active" href="#" aria-current="page">
-          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M12 2l7 9-7 11-7-11 7-9z" />
-            <path d="M12 2v20" />
-          </svg>
-          <span>Routes</span>
-        </a>
-        <a class="nav-item" href="#statistics">
-          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <line x1="4" y1="20" x2="4" y2="12" />
-            <line x1="10" y1="20" x2="10" y2="8" />
-            <line x1="16" y1="20" x2="16" y2="4" />
-            <line x1="22" y1="20" x2="22" y2="16" />
-          </svg>
-          <span>Statistics</span>
-        </a>
-        <a class="nav-item" href="#settings">
-          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="12" cy="12" r="3" />
-            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1 1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33h.09A1.65 1.65 0 0 0 10 3.09V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51h.09a1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v.09a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" />
-          </svg>
-          <span>Settings</span>
-        </a>
+  <div class="gallery">
+    <div class="device">
+      <div class="status-bar">
+        <span>6:12 PM</span>
+        <span class="status-dot" aria-hidden="true"></span>
       </div>
-    </nav>
+      <div class="content">
+        <div class="hero">
+          <div class="greeting">Welcome back, Abebe Tadesse</div>
+          <div class="stats-row">
+            <div class="stat-card">8<span>Trips</span></div>
+            <div class="stat-card">52<span>Trips</span></div>
+            <div class="stat-card">2450<span>Birr</span></div>
+            <div class="stat-card">122<span>Passengers</span></div>
+          </div>
+          <div class="trip-row">
+            <div>
+              <span class="label">From</span> Shiro Meda
+            </div>
+            <div>
+              <span class="label">To</span> Bole Airport
+            </div>
+            <a class="trip-change" href="#">Change</a>
+          </div>
+          <div class="voice-row">
+            <div>
+              Voice commands are enabled
+              <span>You can filter and sort routes by speaking: show fastest route or filter by profit</span>
+            </div>
+            <a class="voice-toggle" href="#">Turn off</a>
+          </div>
+        </div>
+        <div class="map">
+          <div class="route-line">
+            <svg viewBox="0 0 412 380" preserveAspectRatio="none">
+              <path d="M90 260 C130 250 170 220 200 210 C230 200 260 170 280 150" stroke="#ef4444" stroke-width="8" fill="none" stroke-linecap="round" />
+              <path d="M90 300 C140 280 200 250 260 210 C300 190 330 200 350 210" stroke="#fbbf24" stroke-width="8" fill="none" stroke-linecap="round" />
+              <path d="M90 280 C150 260 210 240 260 200 C290 170 320 160 340 150" stroke="#1fb774" stroke-width="8" fill="none" stroke-linecap="round" />
+              <path d="M90 290 C130 270 190 240 240 210 C280 190 320 190 350 200" stroke="#2f6cff" stroke-width="8" fill="none" stroke-linecap="round" />
+            </svg>
+          </div>
+          <div class="city">አዲስ አበባ<br />Addis Abeba</div>
+          <div class="pin primary start">A</div>
+          <div class="pin green end">B</div>
+          <div class="pin mid">S</div>
+          <div class="car-bubble">
+            <div>🚐</div>
+            <div>
+              <div>Shiro Meda</div>
+              <span>5 min</span>
+            </div>
+          </div>
+        </div>
+        <div class="list-header">
+          <div>Select route</div>
+          <a href="#">Sort by: Rating</a>
+        </div>
+        <div class="routes">
+          <div class="route-card active">
+            <div class="route-icon"></div>
+            <div class="route-body">
+              <div class="route-title">Via Mexico and Kazanchis <span class="pill good">11 mins</span></div>
+              <div class="meta">
+                <span>ሪዛ ፤ ለ ወጣት ነው</span>
+                <span>99</span>
+                <span>4.8 ★</span>
+              </div>
+            </div>
+            <div class="meta" style="flex-direction: column; align-items: flex-end; color: var(--text-main);">
+              <span style="font-weight: 800;">ቀጥል</span>
+              <span style="font-weight: 800;">✈️</span>
+            </div>
+          </div>
+          <div class="route-card">
+            <div class="route-icon green"></div>
+            <div class="route-body">
+              <div class="route-title">Via Bole Road <span class="pill">16 mins</span></div>
+              <div class="meta">
+                <span>ሪዛ ፤ ለ ወጣት ነው</span>
+                <span>45</span>
+                <span>3.5 ★</span>
+              </div>
+            </div>
+            <div class="meta" style="flex-direction: column; align-items: flex-end; color: var(--text-main);">
+              <span style="font-weight: 800;">ጀምር</span>
+              <span style="font-weight: 800;">✈️</span>
+            </div>
+          </div>
+          <div class="route-card">
+            <div class="route-icon orange"></div>
+            <div class="route-body">
+              <div class="route-title">Via ፀሐይ <span class="pill">22 mins</span></div>
+              <div class="meta">
+                <span>ሪዛ ፤ ለ ወጣት ነው</span>
+                <span>10</span>
+                <span>2.0 ★</span>
+              </div>
+            </div>
+            <div class="meta" style="flex-direction: column; align-items: flex-end; color: var(--text-main);">
+              <span style="font-weight: 800;">ጀምር</span>
+              <span style="font-weight: 800;">✈️</span>
+            </div>
+          </div>
+          <div class="route-card">
+            <div class="route-icon red"></div>
+            <div class="route-body">
+              <div class="route-title">Via Megenagna <span class="pill">24 mins</span></div>
+              <div class="meta">
+                <span>ሪዛ ፤ ለ ወጣት ነው</span>
+                <span>6</span>
+                <span>1.3 ★</span>
+              </div>
+            </div>
+            <div class="meta" style="flex-direction: column; align-items: flex-end; color: var(--text-main);">
+              <span style="font-weight: 800;">ጀምር</span>
+              <span style="font-weight: 800;">✈️</span>
+            </div>
+          </div>
+        </div>
+        <div class="actions">
+          <button class="cta">Start navigation</button>
+        </div>
+      </div>
+      <div class="nav-shell" aria-label="Primary">
+        <div class="nav">
+          <a class="nav-item active" href="#" aria-current="page">
+            <svg viewBox="0 0 24 24"><path d="M3 11l9-9 9 9v9a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1v-9z" /></svg>
+            <span>Routes</span>
+          </a>
+          <a class="nav-item" href="#statistics">
+            <svg viewBox="0 0 24 24"><line x1="4" y1="20" x2="4" y2="10" /><line x1="10" y1="20" x2="10" y2="6" /><line x1="16" y1="20" x2="16" y2="14" /><line x1="22" y1="20" x2="22" y2="4" /></svg>
+            <span>Statistics</span>
+          </a>
+          <a class="nav-item" href="#settings">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3" /><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1 1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33h.09A1.65 1.65 0 0 0 10 3.09V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51h.09a1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v.09a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" /></svg>
+            <span>Settings</span>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div class="device">
+      <div class="state-label">Route chosen</div>
+      <div class="status-bar">
+        <span>6:12 PM</span>
+        <span class="status-dot" aria-hidden="true"></span>
+      </div>
+      <div class="content">
+        <div class="hero">
+          <div class="greeting">Welcome back, Abebe Tadesse</div>
+          <div class="stats-row">
+            <div class="stat-card">8<span>Trips</span></div>
+            <div class="stat-card">52<span>Trips</span></div>
+            <div class="stat-card">2450<span>Birr</span></div>
+            <div class="stat-card">122<span>Passengers</span></div>
+          </div>
+          <div class="trip-row">
+            <div>
+              <span class="label">From</span> Merkato Terminal
+            </div>
+            <div>
+              <span class="label">To</span> Bole Airport
+            </div>
+            <a class="trip-change" href="#">Change</a>
+          </div>
+          <div class="voice-row">
+            <div>
+              Voice commands are enabled
+              <span>You can filter and sort routes by speaking: show fastest route or filter by profit</span>
+            </div>
+            <a class="voice-toggle" href="#">Turn off</a>
+          </div>
+        </div>
+        <div class="map">
+          <div class="route-line">
+            <svg viewBox="0 0 412 380" preserveAspectRatio="none">
+              <path d="M70 300 C130 280 170 240 220 220 C270 200 310 180 340 150" stroke="#1fb774" stroke-width="10" fill="none" stroke-linecap="round" />
+              <path d="M120 280 L180 260 L220 230 L260 210 L320 190" stroke="#f59e0b" stroke-width="8" fill="none" stroke-linecap="round" stroke-dasharray="4 8" />
+            </svg>
+          </div>
+          <div class="city" style="top:46%; left:46%;">Addis Abeba</div>
+          <div class="pin primary start" style="top:68%; left:40%;">A</div>
+          <div class="pin green end" style="top:26%; left:72%;">B</div>
+          <div class="pin mid" style="top:46%; left:54%;">S</div>
+          <div class="car-bubble">
+            <div>🚐</div>
+            <div>
+              <div>Merkato</div>
+              <span>10 min</span>
+            </div>
+          </div>
+        </div>
+        <div class="list-header">
+          <div>Select route</div>
+          <a href="#">Sort by: Rating</a>
+        </div>
+        <div class="routes">
+          <div class="route-card active">
+            <div class="route-icon"></div>
+            <div class="route-body">
+              <div class="route-title">Via Mexico and Kazanchis <span class="pill good">11 mins</span></div>
+              <div class="meta">
+                <span>ሪዛ ፤ ለ ወጣት ነው</span>
+                <span>99</span>
+                <span>4.8 ★</span>
+              </div>
+            </div>
+            <div class="meta" style="flex-direction: column; align-items: flex-end; color: var(--text-main);">
+              <span style="font-weight: 800;">ቀጥል</span>
+              <span style="font-weight: 800;">✈️</span>
+            </div>
+          </div>
+          <div class="route-card green">
+            <div class="route-icon green"></div>
+            <div class="route-body">
+              <div class="route-title">Via Bole Road <span class="pill">16 mins</span></div>
+              <div class="meta">
+                <span>ሪዛ ፤ ለ ወጣት ነው</span>
+                <span>45</span>
+                <span>3.5 ★</span>
+              </div>
+            </div>
+            <div class="meta" style="flex-direction: column; align-items: flex-end; color: var(--text-main);">
+              <span style="font-weight: 800;">ጀምር</span>
+              <span style="font-weight: 800;">✈️</span>
+            </div>
+          </div>
+          <div class="route-card orange">
+            <div class="route-icon orange"></div>
+            <div class="route-body">
+              <div class="route-title">Via ፀሐይ <span class="pill">22 mins</span></div>
+              <div class="meta">
+                <span>ሪዛ ፤ ለ ወጣት ነው</span>
+                <span>10</span>
+                <span>2.0 ★</span>
+              </div>
+            </div>
+            <div class="meta" style="flex-direction: column; align-items: flex-end; color: var(--text-main);">
+              <span style="font-weight: 800;">ጀምር</span>
+              <span style="font-weight: 800;">✈️</span>
+            </div>
+          </div>
+          <div class="route-card red">
+            <div class="route-icon red"></div>
+            <div class="route-body">
+              <div class="route-title">Via Megenagna <span class="pill">24 mins</span></div>
+              <div class="meta">
+                <span>ሪዛ ፤ ለ ወጣት ነው</span>
+                <span>6</span>
+                <span>1.3 ★</span>
+              </div>
+            </div>
+            <div class="meta" style="flex-direction: column; align-items: flex-end; color: var(--text-main);">
+              <span style="font-weight: 800;">ጀምር</span>
+              <span style="font-weight: 800;">✈️</span>
+            </div>
+          </div>
+        </div>
+        <div class="actions">
+          <button class="cta">Start navigation</button>
+        </div>
+      </div>
+      <div class="nav-shell" aria-label="Primary">
+        <div class="nav">
+          <a class="nav-item active" href="#" aria-current="page">
+            <svg viewBox="0 0 24 24"><path d="M3 11l9-9 9 9v9a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1v-9z" /></svg>
+            <span>Routes</span>
+          </a>
+          <a class="nav-item" href="#statistics">
+            <svg viewBox="0 0 24 24"><line x1="4" y1="20" x2="4" y2="10" /><line x1="10" y1="20" x2="10" y2="6" /><line x1="16" y1="20" x2="16" y2="14" /><line x1="22" y1="20" x2="22" y2="4" /></svg>
+            <span>Statistics</span>
+          </a>
+          <a class="nav-item" href="#settings">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3" /><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1 1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33h.09A1.65 1.65 0 0 0 10 3.09V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51h.09a1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v.09a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" /></svg>
+            <span>Settings</span>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div class="device">
+      <div class="state-label">Navigation</div>
+      <div class="status-bar">
+        <span>6:12 PM</span>
+        <span class="status-dot" aria-hidden="true"></span>
+      </div>
+      <div class="content">
+        <div class="hero">
+          <div class="greeting">Welcome back, Abebe Tadesse</div>
+          <div class="stats-row">
+            <div class="stat-card">8<span>Trips</span></div>
+            <div class="stat-card">52<span>Trips</span></div>
+            <div class="stat-card">2450<span>Birr</span></div>
+            <div class="stat-card">122<span>Passengers</span></div>
+          </div>
+          <div class="trip-row">
+            <div>
+              <span class="label">From</span> Merkato Terminal
+            </div>
+            <div>
+              <span class="label">To</span> Bole Airport
+            </div>
+            <a class="trip-change" href="#">Change</a>
+          </div>
+          <div class="voice-row">
+            <div>
+              Voice commands are enabled
+              <span>You can filter and sort routes by speaking: show fastest route or filter by profit</span>
+            </div>
+            <a class="voice-toggle" href="#">Turn off</a>
+          </div>
+        </div>
+        <div class="map">
+          <div class="route-line">
+            <svg viewBox="0 0 412 380" preserveAspectRatio="none">
+              <path d="M80 320 C140 290 200 260 260 220 C310 190 340 160 360 140" stroke="#1fb774" stroke-width="12" fill="none" stroke-linecap="round" />
+              <path d="M100 280 L160 260 L220 240 L280 210 L320 180" stroke="#f59e0b" stroke-width="8" fill="none" stroke-linecap="round" />
+            </svg>
+          </div>
+          <div class="city" style="top:48%; left:50%;">Addis Abeba</div>
+          <div class="pin primary start" style="top:72%; left:36%;">A</div>
+          <div class="pin green end" style="top:24%; left:72%;">B</div>
+          <div class="pin mid" style="top:52%; left:52%;">S</div>
+          <div class="car-bubble" style="bottom: 32px;">
+            <div>🚐</div>
+            <div>
+              <div>Mexico</div>
+              <span>9 min</span>
+            </div>
+          </div>
+        </div>
+        <div class="list-header">
+          <div>Select route</div>
+          <a href="#">Sort by: Rating</a>
+        </div>
+        <div class="routes">
+          <div class="route-card active">
+            <div class="route-icon"></div>
+            <div class="route-body">
+              <div class="route-title">Via Mexico and Kazanchis <span class="pill good">11 mins</span></div>
+              <div class="meta">
+                <span>ሪዛ ፤ ለ ወጣት ነው</span>
+                <span>99</span>
+                <span>4.8 ★</span>
+              </div>
+            </div>
+            <div class="meta" style="flex-direction: column; align-items: flex-end; color: var(--text-main);">
+              <span style="font-weight: 800;">ቀጥል</span>
+              <span style="font-weight: 800;">✈️</span>
+            </div>
+          </div>
+          <div class="route-card green">
+            <div class="route-icon green"></div>
+            <div class="route-body">
+              <div class="route-title">Via Bole Road <span class="pill">16 mins</span></div>
+              <div class="meta">
+                <span>ሪዛ ፤ ለ ወጣት ነው</span>
+                <span>45</span>
+                <span>3.5 ★</span>
+              </div>
+            </div>
+            <div class="meta" style="flex-direction: column; align-items: flex-end; color: var(--text-main);">
+              <span style="font-weight: 800;">ጀምር</span>
+              <span style="font-weight: 800;">✈️</span>
+            </div>
+          </div>
+          <div class="route-card orange">
+            <div class="route-icon orange"></div>
+            <div class="route-body">
+              <div class="route-title">Via ፀሐይ <span class="pill">22 mins</span></div>
+              <div class="meta">
+                <span>ሪዛ ፤ ለ ወጣት ነው</span>
+                <span>10</span>
+                <span>2.0 ★</span>
+              </div>
+            </div>
+            <div class="meta" style="flex-direction: column; align-items: flex-end; color: var(--text-main);">
+              <span style="font-weight: 800;">ጀምር</span>
+              <span style="font-weight: 800;">✈️</span>
+            </div>
+          </div>
+          <div class="route-card red">
+            <div class="route-icon red"></div>
+            <div class="route-body">
+              <div class="route-title">Via Megenagna <span class="pill">24 mins</span></div>
+              <div class="meta">
+                <span>ሪዛ ፤ ለ ወጣት ነው</span>
+                <span>6</span>
+                <span>1.3 ★</span>
+              </div>
+            </div>
+            <div class="meta" style="flex-direction: column; align-items: flex-end; color: var(--text-main);">
+              <span style="font-weight: 800;">ጀምር</span>
+              <span style="font-weight: 800;">✈️</span>
+            </div>
+          </div>
+        </div>
+        <div class="actions">
+          <button class="cta">Continue</button>
+          <button class="cta secondary">Exit</button>
+        </div>
+      </div>
+      <div class="nav-shell" aria-label="Primary">
+        <div class="nav">
+          <a class="nav-item active" href="#" aria-current="page">
+            <svg viewBox="0 0 24 24"><path d="M3 11l9-9 9 9v9a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1v-9z" /></svg>
+            <span>Routes</span>
+          </a>
+          <a class="nav-item" href="#statistics">
+            <svg viewBox="0 0 24 24"><line x1="4" y1="20" x2="4" y2="10" /><line x1="10" y1="20" x2="10" y2="6" /><line x1="16" y1="20" x2="16" y2="14" /><line x1="22" y1="20" x2="22" y2="4" /></svg>
+            <span>Statistics</span>
+          </a>
+          <a class="nav-item" href="#settings">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3" /><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1 1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33h.09A1.65 1.65 0 0 0 10 3.09V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51h.09a1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v.09a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" /></svg>
+            <span>Settings</span>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div class="device">
+      <div class="state-label">Paused</div>
+      <div class="status-bar">
+        <span>6:12 PM</span>
+        <span class="status-dot" aria-hidden="true"></span>
+      </div>
+      <div class="content">
+        <div class="hero">
+          <div class="greeting">Welcome back, Abebe Tadesse</div>
+          <div class="stats-row">
+            <div class="stat-card">8<span>Trips</span></div>
+            <div class="stat-card">52<span>Trips</span></div>
+            <div class="stat-card">2450<span>Birr</span></div>
+            <div class="stat-card">122<span>Passengers</span></div>
+          </div>
+          <div class="trip-row">
+            <div>
+              <span class="label">From</span> Merkato Terminal
+            </div>
+            <div>
+              <span class="label">To</span> Bole Airport
+            </div>
+            <a class="trip-change" href="#">Change</a>
+          </div>
+          <div class="voice-row">
+            <div>
+              Voice commands are enabled
+              <span>You can filter and sort routes by speaking: show fastest route or filter by profit</span>
+            </div>
+            <a class="voice-toggle" href="#">Turn off</a>
+          </div>
+        </div>
+        <div class="map">
+          <div class="route-line">
+            <svg viewBox="0 0 412 380" preserveAspectRatio="none">
+              <path d="M80 320 C130 300 190 270 240 230 C280 200 330 170 360 150" stroke="#ef4444" stroke-width="10" fill="none" stroke-linecap="round" />
+              <path d="M90 310 C140 290 190 260 250 220 C290 190 330 170 360 150" stroke="#1fb774" stroke-width="12" fill="none" stroke-linecap="round" />
+              <path d="M120 280 L170 260 L230 230 L280 210 L330 190" stroke="#f59e0b" stroke-width="8" fill="none" stroke-linecap="round" />
+            </svg>
+          </div>
+          <div class="city" style="top:48%; left:44%;">Addis Abeba</div>
+          <div class="pin primary start" style="top:68%; left:36%;">A</div>
+          <div class="pin green end" style="top:20%; left:70%;">B</div>
+          <div class="pin mid" style="top:50%; left:50%;">S</div>
+          <div class="car-bubble" style="bottom: 32px;">
+            <div>🚐</div>
+            <div>
+              <div>Mexico</div>
+              <span>8 min</span>
+            </div>
+          </div>
+        </div>
+        <div class="list-header">
+          <div>Select route</div>
+          <a href="#">Sort by: Rating</a>
+        </div>
+        <div class="routes">
+          <div class="route-card active">
+            <div class="route-icon"></div>
+            <div class="route-body">
+              <div class="route-title">Via Mexico and Kazanchis <span class="pill good">11 mins</span></div>
+              <div class="meta">
+                <span>ሪዛ ፤ ለ ወጣት ነው</span>
+                <span>99</span>
+                <span>4.8 ★</span>
+              </div>
+            </div>
+            <div class="meta" style="flex-direction: column; align-items: flex-end; color: var(--text-main);">
+              <span style="font-weight: 800;">ቀጥል</span>
+              <span style="font-weight: 800;">✈️</span>
+            </div>
+          </div>
+          <div class="route-card green">
+            <div class="route-icon green"></div>
+            <div class="route-body">
+              <div class="route-title">Via Bole Road <span class="pill">16 mins</span></div>
+              <div class="meta">
+                <span>ሪዛ ፤ ለ ወጣት ነው</span>
+                <span>45</span>
+                <span>3.5 ★</span>
+              </div>
+            </div>
+            <div class="meta" style="flex-direction: column; align-items: flex-end; color: var(--text-main);">
+              <span style="font-weight: 800;">ጀምር</span>
+              <span style="font-weight: 800;">✈️</span>
+            </div>
+          </div>
+          <div class="route-card orange">
+            <div class="route-icon orange"></div>
+            <div class="route-body">
+              <div class="route-title">Via ፀሐይ <span class="pill">22 mins</span></div>
+              <div class="meta">
+                <span>ሪዛ ፤ ለ ወጣት ነው</span>
+                <span>10</span>
+                <span>2.0 ★</span>
+              </div>
+            </div>
+            <div class="meta" style="flex-direction: column; align-items: flex-end; color: var(--text-main);">
+              <span style="font-weight: 800;">ጀምር</span>
+              <span style="font-weight: 800;">✈️</span>
+            </div>
+          </div>
+          <div class="route-card red">
+            <div class="route-icon red"></div>
+            <div class="route-body">
+              <div class="route-title">Via Megenagna <span class="pill">24 mins</span></div>
+              <div class="meta">
+                <span>ሪዛ ፤ ለ ወጣት ነው</span>
+                <span>6</span>
+                <span>1.3 ★</span>
+              </div>
+            </div>
+            <div class="meta" style="flex-direction: column; align-items: flex-end; color: var(--text-main);">
+              <span style="font-weight: 800;">ጀምር</span>
+              <span style="font-weight: 800;">✈️</span>
+            </div>
+          </div>
+        </div>
+        <div class="actions">
+          <button class="cta">Continue</button>
+          <button class="cta secondary">Exit</button>
+        </div>
+      </div>
+      <div class="nav-shell" aria-label="Primary">
+        <div class="nav">
+          <a class="nav-item active" href="#" aria-current="page">
+            <svg viewBox="0 0 24 24"><path d="M3 11l9-9 9 9v9a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1v-9z" /></svg>
+            <span>Routes</span>
+          </a>
+          <a class="nav-item" href="#statistics">
+            <svg viewBox="0 0 24 24"><line x1="4" y1="20" x2="4" y2="10" /><line x1="10" y1="20" x2="10" y2="6" /><line x1="16" y1="20" x2="16" y2="14" /><line x1="22" y1="20" x2="22" y2="4" /></svg>
+            <span>Statistics</span>
+          </a>
+          <a class="nav-item" href="#settings">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3" /><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1 1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33h.09A1.65 1.65 0 0 0 10 3.09V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51h.09a1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v.09a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" /></svg>
+            <span>Settings</span>
+          </a>
+        </div>
+      </div>
+    </div>
   </div>
 </body>
 </html>
