@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Driver Route Companion</title>
+  <style>
+    :root {
+      --nav-height: 76px;
+      --primary: #2f6cff;
+      --primary-soft: #e7edff;
+      --text-main: #0f1a38;
+      --text-muted: #6b7280;
+      --border: #e5e7eb;
+      --bg: #f8fafc;
+      --shadow: 0 -6px 30px rgba(15, 26, 56, 0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: var(--text-main);
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    header {
+      padding: 24px 24px 8px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 24px;
+      font-weight: 700;
+    }
+
+    p.lead {
+      margin: 8px 0 0;
+      color: var(--text-muted);
+      line-height: 1.5;
+      max-width: 780px;
+    }
+
+    main {
+      flex: 1;
+      padding: 0 24px 120px;
+      display: grid;
+      gap: 16px;
+      align-content: start;
+    }
+
+    .card {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 16px;
+      box-shadow: 0 12px 40px rgba(15, 26, 56, 0.06);
+    }
+
+    .card h2 {
+      margin: 0 0 6px;
+      font-size: 18px;
+    }
+
+    .card p {
+      margin: 0;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    .nav-shell {
+      position: sticky;
+      bottom: 0;
+      width: 100%;
+      height: var(--nav-height);
+      background: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: var(--shadow);
+      border-top: 1px solid var(--border);
+      padding: 12px 20px;
+    }
+
+    .nav {
+      width: 100%;
+      max-width: 520px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 10px 0;
+      border-radius: 16px;
+      color: var(--text-muted);
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+
+    .nav-item svg {
+      width: 24px;
+      height: 24px;
+      stroke: currentColor;
+    }
+
+    .nav-item.active {
+      background: var(--primary-soft);
+      color: var(--primary);
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Routes</h1>
+    <p class="lead">
+      Minibus drivers in Addis Ababa rely on personal experience and word-of-mouth to pick their next
+      route. This prototype offers a conversational, safety-aware companion that surfaces the best
+      options based on evolving demand and congestion.
+    </p>
+  </header>
+
+  <main>
+    <section class="card">
+      <h2>Suggested route</h2>
+      <p>Shiro Meda ➜ Megenagna · Avoid heavy congestion near Arat Kilo.</p>
+    </section>
+
+    <section class="card">
+      <h2>Safety &amp; demand insight</h2>
+      <p>Passenger demand is trending upward in Merkato over the next 20 minutes.</p>
+    </section>
+
+    <section class="card">
+      <h2>Conversation starter</h2>
+      <p>“Where would you like to head next? I can suggest a less crowded route.”</p>
+    </section>
+  </main>
+
+  <nav class="nav-shell" aria-label="Primary">
+    <div class="nav">
+      <a class="nav-item active" href="#" aria-current="page">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 2l7 9-7 11-7-11 7-9z" />
+          <path d="M12 2v20" />
+        </svg>
+        <span>Routes</span>
+      </a>
+      <a class="nav-item" href="#statistics">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="4" y1="20" x2="4" y2="12" />
+          <line x1="10" y1="20" x2="10" y2="8" />
+          <line x1="16" y1="20" x2="16" y2="4" />
+          <line x1="22" y1="20" x2="22" y2="16" />
+        </svg>
+        <span>Statistics</span>
+      </a>
+      <a class="nav-item" href="#settings">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="3" />
+          <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33h.09A1.65 1.65 0 0 0 10 3.09V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51h.09a1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v.09a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" />
+        </svg>
+        <span>Settings</span>
+      </a>
+    </div>
+  </nav>
+</body>
+</html>
